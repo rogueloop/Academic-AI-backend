@@ -1,1 +1,2 @@
-__pycache__/
+**/student/__pycache__/
+**/courses/__pycache__/
