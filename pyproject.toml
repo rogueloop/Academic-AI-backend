@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "academic-ai-backend"
+version = "0.1.0"
+description = ""
+authors = ["Ajju-kld <mohammedajmal996@gmail.com>"]
+readme = "README.md"
+packages = [{include = "academic_ai_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
