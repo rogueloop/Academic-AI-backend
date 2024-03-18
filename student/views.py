@@ -1,9 +1,9 @@
 from rest_framework import viewsets
-from .models import Student, Task
+from .models import User, Task
 from .serializers import StudentSerializer, TaskSerializer
 
 class StudentViewSet(viewsets.ModelViewSet):
-    queryset = Student.objects.all()
+    queryset = User.objects.all()
     serializer_class = StudentSerializer
 
 class TaskViewSet(viewsets.ModelViewSet):
