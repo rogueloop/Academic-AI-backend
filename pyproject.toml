@@ -9,6 +9,9 @@ packages = [{include = "academic_ai_backend"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 django = "^5.0.3"
+djangorestframework = "^3.15.0"
+django-cors-headers = "^4.3.1"
+django-rest-knox = "^4.2.0"
 
 
 [build-system]

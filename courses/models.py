@@ -10,6 +10,8 @@ class Course(models.Model):
     course_name = models.CharField(max_length=100)
     credits = models.IntegerField()
     hours = models.IntegerField()
+    semester=models.IntegerField()
+    
     
 
 class Topic(models.Model):
@@ -18,5 +20,6 @@ class Topic(models.Model):
     max_time = models.IntegerField()
     priority = models.IntegerField()
     focus_area = models.BooleanField()
+    
 
     
