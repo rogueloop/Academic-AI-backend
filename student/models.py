@@ -13,7 +13,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     scheme = models.CharField(max_length=20)
     credits = models.IntegerField()
     study_time = models.IntegerField()
-    email = models.EmailField(max_length=50)
+
     password = models.CharField(max_length=50)
     is_admin = models.BooleanField(default=False)
     
@@ -24,7 +24,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.clg_id
 
 
 class Task(models.Model):

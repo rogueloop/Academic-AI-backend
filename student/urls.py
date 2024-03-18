@@ -1,11 +1,10 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from . import views
-
-router = DefaultRouter()
-router.register(r'students', views.StudentViewSet)
-router.register(r'tasks', views.TaskViewSet)
+from .views import RegisterAPI,LoginAPI
+from django.urls import path
+from knox import views as knox_views
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('register/', RegisterAPI.as_view(), name='register'),
+    path('login/', LoginAPI.as_view(), name='login'),
+    path('logout/', knox_views.LogoutView.as_view(), name='logout'),
+    path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall')
 ]
