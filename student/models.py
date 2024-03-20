@@ -8,14 +8,16 @@ from .managers import CustomUserManager
 class User(AbstractBaseUser, PermissionsMixin):
     clg_id = models.CharField(max_length=10,primary_key=True)
     name = models.CharField(max_length=100)
+    admission_year = models.IntegerField()
     dept = models.CharField(max_length=50)
     semester = models.IntegerField()
     scheme = models.CharField(max_length=20)
     credits = models.IntegerField()
     study_time = models.IntegerField()
-
     password = models.CharField(max_length=50)
     is_admin = models.BooleanField(default=False)
+    series_1_date = models.DateField()
+    series_2_date = models.DateField()
     
     
     USERNAME_FIELD = "clg_id"
@@ -30,6 +32,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Task(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     task_name = models.CharField(max_length=100)
+    module = models.IntegerField()
+    deadline = models.DateField()   
     max_time = models.IntegerField()
     priority = models.IntegerField()
     prequist= models.CharField(max_length=100)

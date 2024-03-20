@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from .models import User, Task
 from .serializers import StudentSerializer, TaskSerializer
-
+from .scheduler import schedule
 
 from rest_framework import generics, permissions
 from rest_framework.response import Response
@@ -46,6 +46,14 @@ class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     
 
-    
+@api_view(['GET'])
+def get_topics(request):
+    """
+    Determine the current user by their token, and return their data
+    """
+    schedules=schedule.Scheduler(12, 0.01, 0.9,0.3,20)
+    schedules.train()
+    res= schedules.generate_study_schedule()
+    return Response(res)
     
 
