@@ -23,10 +23,10 @@ class Course(models.Model):
 class Topic(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     topic_name = models.CharField(max_length=100)
-    max_time = models.IntegerField()
-    module = models.IntegerField()
-    priority = models.IntegerField()
-    focus_area = models.BooleanField()
+    max_time = models.IntegerField(null=True, blank=True)
+    module = models.IntegerField(null=True, blank=True)
+    priority = models.IntegerField(null=True, blank=True)
+    focus_area = models.BooleanField(blank=True, null=True)
     
     
 
