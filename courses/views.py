@@ -3,6 +3,7 @@ from .models import Course, Topic
 from .serializers import CourseSerializer, TopicSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import action, APIView
+from student.models import User
 
 class CourseViewSet(generics.ListCreateAPIView):
     queryset=Course.objects.all()

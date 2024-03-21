@@ -49,9 +49,12 @@ class TaskViewSet(viewsets.ModelViewSet):
 @api_view(['GET'])
 def get_topics(request):
     """
-    Determine the current user by their token, and return their data
+    Determine the current user by their token, and return ttaheir data
     """
-    schedules=schedule.Scheduler(12, 0.01, 0.9,0.3,20)
+    task=Task.objects.all()
+    serial=TaskSerializer(task,many=True).data
+    schedules=schedule.Scheduler(12, 0.01, 0.9,0.3,20,serial)
+    print(serial)
     schedules.train()
     res= schedules.generate_study_schedule()
     return Response(res)

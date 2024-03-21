@@ -1,0 +1,39 @@
+POST 
+http://localhost:8000/courses/courses
+{
+  "department": "cse",
+  "course_code": "CST445",
+  "no_of_modules": 5,
+  "semester": 8,
+  "scheme": "2019",
+  "credits":5,
+  "course_name": "DBMS",
+  "hours": 42,
+  "topics": [
+    {
+      "module": 1,
+      "topic": ["Introduction to Databases", "Data Models", "Relational Database Concepts"],
+      "focus_area": ["Introduction to Databases"]
+    },
+    {
+      "module": 2,
+      "topic": ["SQL Basics", "Query Optimization", "Database Normalization"],
+      "focus_area": ["Database Normalization"]
+    },
+    {
+      "module": 3,
+      "topic": ["Transaction Management", "Concurrency Control", "ACID Properties"],
+      "focus_area": ["Transaction Management", "Concurrency Control"]
+    },
+    {
+      "module": 4,
+      "topic": ["Indexing", "Database Security", "Backup and Recovery"],
+      "focus_area": ["Database Security", "Backup and Recovery"]
+    },
+    {
+      "module": 5,
+      "topic": ["Data Warehousing", "Data Mining", "Big Data Concepts"],
+      "focus_area": ["Data Mining"]
+    }
+  ]
+}
