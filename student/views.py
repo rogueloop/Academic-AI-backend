@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets , generics
 from .models import User, Task
 from .serializers import StudentSerializer, TaskSerializer
 from .scheduler import schedule
@@ -41,7 +41,7 @@ class LoginAPI(KnoxLoginView):
         }
         return Response(response_data)
 
-class TaskViewSet(viewsets.ModelViewSet):
+class TaskViewSet(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     
@@ -56,7 +56,6 @@ def get_topics(request):
     schedules=schedule.Scheduler(12, 0.01, 0.9,0.3,20,serial)
     print(serial)
     schedules.train()
-    res= schedules.generate_study_schedule()
+    res = schedules.generate_study_schedule()
     return Response(res)
-    
 
