@@ -30,5 +30,22 @@ class Topic(models.Model):
     
     
 
-
+class Batch(models.Model):
+    bacth_year=models.CharField(primary_key=True,max_length=50)
+    scheme=models.CharField(max_length=20)
     
+    
+class Exams(models.Model):
+    name = models.CharField(max_length=100)
+    date = models.DateField()
+    time = models.TimeField()
+    duration = models.IntegerField()
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
+    department = models.CharField(max_length=100)
+    semester = models.IntegerField()
+    subject = models.ForeignKey(Course, on_delete=models.CASCADE)
+    exam_type = models.CharField(max_length=100)
+    exam_credits = models.IntegerField(blank=True)
+    
+    def __str__(self):
+        return self.name

@@ -125,8 +125,8 @@ class StudyScheduleEnvironment:
         task = self.task_pool[action]
         
         # Check if the task has a prerequisite
-        if task['prerequisite'] and task['prerequisite'] not in self.completed_topics:
-            return self.state, 0  # Can't study this topic if the prerequisite is not completed
+        # if task['prerequisite'] and task['prerequisite'] not in self.completed_topics:
+        #     return self.state, 0  # Can't study this topic if the prerequisite is not completed
 
         # Check if the same subject topic has already been studied on the same day
         if task['subject'] in self.completed_topics:
