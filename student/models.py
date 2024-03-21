@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
+from courses.models import Subject
 
 from .managers import CustomUserManager
 
@@ -31,14 +32,16 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Task(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject=models.ForeignKey(Subject, on_delete=models.CASCADE)
     task_name = models.CharField(max_length=100)
     module = models.IntegerField()
-    deadline = models.DateField()   
-    max_time = models.IntegerField()
-    min_time = models.IntegerField()
+    deadline = models.IntegerField()  
+    max_study_time = models.IntegerField()
+    min_study_time = models.IntegerField()
     priority = models.IntegerField()
     prequist= models.CharField(max_length=100,blank=True, null=True)
     focus_area = models.BooleanField()
+    done= models.BooleanField(default=False)
     def __str__(self):
-        return self.task_name
+        return f"{self.task_name} - {self.course.course_name}"
     

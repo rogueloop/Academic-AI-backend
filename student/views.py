@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets , generics
 from .models import User, Task
 from .serializers import StudentSerializer, TaskSerializer
 from .scheduler import schedule
@@ -41,7 +41,7 @@ class LoginAPI(KnoxLoginView):
         }
         return Response(response_data)
 
-class TaskViewSet(viewsets.ModelViewSet):
+class TaskViewSet(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     
@@ -51,9 +51,15 @@ def get_topics(request):
     """
     Determine the current user by their token, and return their data
     """
-    schedules=schedule.Scheduler(12, 0.01, 0.9,0.3,20)
+    user = request.user
+    # Your code to determine the user based on the token goes here
+    datas=Task.objects.filter(student=user)
+    serializer = TaskSerializer(datas, many=True)
+    data=serializer.data
+    print(data)
+
+    schedules = schedule.Scheduler(12, 0.01, 0.9, 0.3, 20)
     schedules.train()
-    res= schedules.generate_study_schedule()
+    res = schedules.generate_study_schedule()
     return Response(res)
-    
 
