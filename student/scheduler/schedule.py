@@ -5,11 +5,10 @@ import torch.nn as nn
 import torch.optim as optim
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class StudyScheduleEnvironment:
-    def __init__(self, daily_time_quota,task_pool):
-    def __init__(self, daily_time_quota,task_pool):
+    def __init__(self, daily_time_quota,task):
         self.daily_time_quota = daily_time_quota
         self.state = daily_time_quota
-        self.task_pool=task_pool
+        self.task_pool=task
 #         self.task_pool = [
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Systems of Linear Equations', 'min_study_time': 2, 'max_study_time': 4, 'priority': 3, 'prerequisite': None, 'deadline': 6},
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Gauss Elimination, Row Echelon Form, and Rank of a Matrix', 'min_study_time': 3, 'max_study_time': 5, 'priority': 4, 'prerequisite': 'Systems of Linear Equations', 'deadline': 5},
@@ -17,7 +16,7 @@ class StudyScheduleEnvironment:
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Eigenvalues and Eigenvectors', 'min_study_time': 3, 'max_study_time': 5, 'priority': 4, 'prerequisite': 'Fundamental Theorem for Linear Systems', 'deadline': 5},
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Diagonalization of Matrices', 'min_study_time': 2, 'max_study_time': 4, 'priority': 3, 'prerequisite': 'Eigenvalues and Eigenvectors', 'deadline': 7},
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Orthogonal Transformation, Quadratic Forms, and Canonical Forms', 'min_study_time': 3, 'max_study_time': 5, 'priority': 4, 'prerequisite': 'Diagonalization of Matrices', 'deadline': 8},
-        self.task_pool=task_pool
+        # self.task_pool=task_pool
 #         self.task_pool = [
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Systems of Linear Equations', 'min_study_time': 2, 'max_study_time': 4, 'priority': 3, 'prerequisite': None, 'deadline': 6},
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Gauss Elimination, Row Echelon Form, and Rank of a Matrix', 'min_study_time': 3, 'max_study_time': 5, 'priority': 4, 'prerequisite': 'Systems of Linear Equations', 'deadline': 5},
