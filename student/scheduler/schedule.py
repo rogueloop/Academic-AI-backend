@@ -5,18 +5,10 @@ import torch.nn as nn
 import torch.optim as optim
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class StudyScheduleEnvironment:
-    def __init__(self, daily_time_quota,task):
+    def __init__(self, daily_time_quota,task_pool):
         self.daily_time_quota = daily_time_quota
         self.state = daily_time_quota
-        self.task_pool=task
-#         self.task_pool = [
-#     {'subject': 'Linear Algebra and Calculus', 'description': 'Systems of Linear Equations', 'min_study_time': 2, 'max_study_time': 4, 'priority': 3, 'prerequisite': None, 'deadline': 6},
-#     {'subject': 'Linear Algebra and Calculus', 'description': 'Gauss Elimination, Row Echelon Form, and Rank of a Matrix', 'min_study_time': 3, 'max_study_time': 5, 'priority': 4, 'prerequisite': 'Systems of Linear Equations', 'deadline': 5},
-#     {'subject': 'Linear Algebra and Calculus', 'description': 'Fundamental Theorem for Linear Systems', 'min_study_time': 2, 'max_study_time': 4, 'priority': 3, 'prerequisite': 'Gauss Elimination, Row Echelon Form, and Rank of a Matrix', 'deadline': 7},
-#     {'subject': 'Linear Algebra and Calculus', 'description': 'Eigenvalues and Eigenvectors', 'min_study_time': 3, 'max_study_time': 5, 'priority': 4, 'prerequisite': 'Fundamental Theorem for Linear Systems', 'deadline': 5},
-#     {'subject': 'Linear Algebra and Calculus', 'description': 'Diagonalization of Matrices', 'min_study_time': 2, 'max_study_time': 4, 'priority': 3, 'prerequisite': 'Eigenvalues and Eigenvectors', 'deadline': 7},
-#     {'subject': 'Linear Algebra and Calculus', 'description': 'Orthogonal Transformation, Quadratic Forms, and Canonical Forms', 'min_study_time': 3, 'max_study_time': 5, 'priority': 4, 'prerequisite': 'Diagonalization of Matrices', 'deadline': 8},
-        # self.task_pool=task_pool
+        self.task_pool=task_pool
 #         self.task_pool = [
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Systems of Linear Equations', 'min_study_time': 2, 'max_study_time': 4, 'priority': 3, 'prerequisite': None, 'deadline': 6},
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Gauss Elimination, Row Echelon Form, and Rank of a Matrix', 'min_study_time': 3, 'max_study_time': 5, 'priority': 4, 'prerequisite': 'Systems of Linear Equations', 'deadline': 5},
@@ -140,10 +132,14 @@ class StudyScheduleEnvironment:
         # Check if the same subject topic has already been studied on the same day
         if task['subject'] in self.completed_topics:
             # Check if the deadline is close, allowing the same subject topic on the same day
-            if task['deadline'] <= 2:  # You can adjust the threshold for a close deadline
+            if task['deadline'] <= 20:  # You can adjust the threshold for a close deadline(in days) example(20 days)
                 pass
             else:
                 return self.state, 0  # Can't study the same subject on the same day
+
+         # Check if the task is a focus area and if the maximum limit of focus areas has been reached
+        if 'focus_area' in task and task['focus_area'] and self.num_focus_areas_selected >= self.max_focus_areas:
+            return self.state, 0  # Can't study more focus areas than the maximum allowed
 
         task_time = np.random.randint(task['min_study_time'], task['max_study_time'] + 1)
         reward = 0
@@ -197,52 +193,81 @@ class QLearningAgent:
            
 
     def train(self):
+    # Loop over the specified number of epochs
         for epoch in range(self.num_epochs):
+        # Reset the environment to its initial state and get the initial state
             state = self.env.reset()
+        # Initialize the total reward accumulated in this iteration or epoch
             total_reward = 0
-            
-            self.env.completed_topics = set()  # Reset completed topics for each epoch
-            max_steps = 1000  # Adjust as needed
+        
+        # Reset the set of completed topics for each epoch
+            self.env.completed_topics = set()
+        
+        # Set the maximum number of steps per epoch (adjust as needed)
+            max_steps = 1000
+        # Initialize the step count
             step_count = 0
+        
+        # Loop until the maximum number of steps is reached or the episode is done
             while step_count < max_steps:
+            # Select an action based on the current state using the Q-learning agent's policy
                 action = self.select_action(state)
+            
+            # Take the selected action and observe the next state and the reward
                 next_state, reward = self.env.step(action)
 
+            # Compute the Q-values for the next state using the Q-network
                 with torch.no_grad():
                     q_values_next = self.q_network(torch.tensor([next_state], dtype=torch.float32))
+                # Find the maximum Q-value for the next state
                     max_q_value_next = torch.max(q_values_next).item()
 
+            # Compute the target Q-value using the Bellman equation
                 target_q_value = reward + self.gamma * max_q_value_next
+
+            # Get the current Q-value for the selected action
                 current_q_value = self.q_network(torch.tensor([state], dtype=torch.float32))[action]
 
+            # Compute the loss between the current Q-value and the target Q-value
                 loss = self.criterion(current_q_value, torch.tensor(target_q_value))
 
+            # Zero the gradients of the optimizer
                 self.optimizer.zero_grad()
+            # Compute the gradients of the loss with respect to the model parameters
                 loss.backward()
+            # Update the model parameters using the optimizer
                 self.optimizer.step()
 
+            # Accumulate the reward obtained from taking the action
                 total_reward += reward
+            # Update the current state to the next state
                 state = next_state
-                step_count+=1
+            # Increment the step count
+                step_count += 1
+            
+            # Check if the episode is done (e.g., daily time quota is exhausted)
                 if self.env.is_episode_done():
                     break
-                
 
+        # Print the total reward obtained in this epoch
             print(f'Epoch {epoch + 1}/{self.num_epochs}, Total Reward: {total_reward}')
+
+    # Save the trained Q-network's parameters to a file
         torch.save(self.q_network.state_dict(), "qnetwork.pth")
+    # Print the state dictionary of the Q-network (for debugging or inspection)
         print(self.q_network.state_dict())
 
 # Set parameters
 
 class Scheduler:
     
-    def __init__(self,daily_time_quota,learning_rate, gamma, epsilon, num_epochs,task):
+    def __init__(self,daily_time_quota,learning_rate, gamma, epsilon, num_epochs,task_pool):
         self.daily_time_quota=daily_time_quota
         self.learning_rate=learning_rate
         self.gamma=gamma
         self.epsilon=epsilon
         self.num_epochs=num_epochs
-        self.env = StudyScheduleEnvironment(daily_time_quota,task)
+        self.env = StudyScheduleEnvironment(daily_time_quota,task_pool)
         self.agent = QLearningAgent(self.env, learning_rate, gamma, epsilon, num_epochs)
 # Create environment and agent
     def train(self):
