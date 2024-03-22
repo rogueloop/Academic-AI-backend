@@ -1,7 +1,6 @@
 POST 
 http://localhost:8000/courses/courses
 
-
 {
   "department": "CSE",
   "course_code": "EST200",
@@ -75,10 +74,6 @@ http://localhost:8000/courses/courses
     }
   ]
 }
-
-
-
-
 
 {
   "department": "CSE",
