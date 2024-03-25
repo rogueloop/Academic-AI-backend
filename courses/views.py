@@ -49,12 +49,16 @@ class CourseViewSet(generics.ListCreateAPIView):
 
             for topic_name in topics_list:
 
-                random_time = random.randint(120, 240)  # Random time between 2 hours (120 minutes) and 4 hours (240 minutes)
+                random_time = random.randint(20, 40)  # Random time between 2 hours (120 minutes) and 4 hours (240 minutes)
 
                 max_time = random_time
 
-                mintime = random_time // 2  # Half of the max_time
-
+                mintime = 18 # Half of the max_time
+                
+                #deadline calculation
+                    # 1. Get the date of the exams from the exam instance 
+                    # 2. Calculate the number of days left for the exam
+                
                 focus_area = True if topic_name in focus_areas else False
 
                 Topic.objects.create(subject=course, topic_name=topic_name, module=module, focus_area=focus_area,priority=priority)
