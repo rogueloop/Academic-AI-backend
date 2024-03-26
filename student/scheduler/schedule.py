@@ -203,7 +203,7 @@ class QLearningAgent:
             with torch.no_grad():
                 q_values = self.q_network(
                     torch.tensor([state], dtype=torch.float32))
-                print("qvalues: ",torch.argmax(q_values).item())
+                # print("qvalues: ",torch.argmax(q_values).item())
                 return torch.argmax(q_values).item()
 
     def train(self):
