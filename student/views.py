@@ -53,7 +53,7 @@ def get_topics(request):
     """
     task=Task.objects.all()
     serial=TaskSerializer(task,many=True).data
-    schedules=schedule.Scheduler(12, 0.01, 0.9,0.4,50,serial)
+    schedules=schedule.Scheduler(3, 0.01, 0.9,0.4,35,serial)
     print(serial)
     schedules.train()
     res = schedules.generate_study_schedule()
