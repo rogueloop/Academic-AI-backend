@@ -7,5 +7,7 @@ router = DefaultRouter()
 
 urlpatterns = [
     path('courses',views.CourseViewSet.as_view(),name='courses' ),
-    path('topic',views.TopicViewSet.as_view(),name='courses')
+    path('topic',views.TopicViewSet.as_view(),name='courses'),
+    # path('exam',views.ExamViewSet.as_view(),name='courses'),
+    path('exams/', views.ExamViewSet.as_view({'get': 'list', 'post': 'create'}), name='exams'),
 ]

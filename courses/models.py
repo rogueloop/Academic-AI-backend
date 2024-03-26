@@ -35,17 +35,9 @@ class Batch(models.Model):
     scheme=models.CharField(max_length=20)
     
     
-class Exams(models.Model):
-    name = models.CharField(max_length=100)
-    date = models.DateField()
-    time = models.TimeField()
-    duration = models.IntegerField()
-    batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
-    department = models.CharField(max_length=100)
-    semester = models.IntegerField()
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    exam_type = models.CharField(max_length=100)
-    exam_credits = models.IntegerField(blank=True)
-    
-    def __str__(self):
-        return self.name
+class Exam(models.Model):
+    department_name = models.CharField(max_length=100)
+    semester = models.CharField(max_length=100,default="")
+    series_one_date = models.DateField()
+    series_two_date = models.DateField()
+    end_semester_date = models.DateField()

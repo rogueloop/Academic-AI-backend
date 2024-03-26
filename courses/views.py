@@ -1,6 +1,6 @@
 from rest_framework import viewsets ,generics
-from .models import Subject, Topic
-from .serializers import CourseSerializer, TopicSerializer
+from .models import Subject, Topic,Exam
+from .serializers import CourseSerializer, TopicSerializer,ExamSerializer
 
 from rest_framework.response import Response
 
@@ -9,7 +9,6 @@ from student.models import User
 
 from student.models import User,Task
 import random
-
 
 
 class CourseViewSet(generics.ListCreateAPIView):
@@ -80,3 +79,6 @@ class TopicViewSet(generics.ListCreateAPIView):
     serializer_class = TopicSerializer
     
 
+class ExamViewSet(viewsets.ModelViewSet):
+    queryset = Exam.objects.all()
+    serializer_class = ExamSerializer

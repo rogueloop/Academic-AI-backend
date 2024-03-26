@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Subject, Topic
+from .models import Subject, Topic , Exam
 
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +11,9 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Subject
         fields = ('department', 'subject_code', 'no_of_modules', 'semester', 'scheme', 'subject_name', 'hours','credits')
 
-
-        
+class ExamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Exam
+        fields = '__all__'
+       
 
