@@ -42,6 +42,7 @@ class Task(models.Model):
     prequist= models.CharField(max_length=100,blank=True, null=True)
     focus_area = models.BooleanField()
     done= models.BooleanField(default=False)
+    difficulty = models.IntegerField(default=0)
     def __str__(self):
         return f"{self.task_name} - {self.course.course_name}"
     

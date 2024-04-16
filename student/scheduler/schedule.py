@@ -14,6 +14,9 @@ class StudyScheduleEnvironment:
         self.task_pool = task_pool
         self.max_focus_areas = 2
         self.num_focus_areas_selected = 0
+        self.difficulty_Level = 0  # 0 for easy , incrimented by one incase of difficulty feeling by student. 
+        # 5 for most difficult 
+
 #         self.task_pool = [
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Systems of Linear Equations', 'min_study_time': 2, 'max_study_time': 4, 'priority': 3, 'prerequisite': None, 'deadline': 6},
 #     {'subject': 'Linear Algebra and Calculus', 'description': 'Gauss Elimination, Row Echelon Form, and Rank of a Matrix', 'min_study_time': 3, 'max_study_time': 5, 'priority': 4, 'prerequisite': 'Systems of Linear Equations', 'deadline': 5},
