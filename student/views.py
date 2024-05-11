@@ -59,3 +59,33 @@ def get_topics(request):
     res = schedules.generate_study_schedule()
     return Response(res) 
 
+
+@api_view(['POST'])
+def feedback(request):
+    # Using get() method with a default value to avoid KeyError if 'done' is not in the request data
+    done = request.data.get('done', [])
+    # Using get() method with a default value to avoid KeyError if 'not_done' is not in the request data
+    not_done_list = request.data.get('not_done', [])
+
+    if done:
+        # Iterate over the tasks marked as done
+        for task_name in done:
+            # Search for tasks with the given name
+            tasks = Task.objects.filter(task_name=task_name)
+            for task in tasks:
+                # Set the 'done' attribute of the task to True
+                task.done = True
+                task.save()
+
+    if not_done_list:
+        # Iterate over the tasks marked as not done
+        for task_name in not_done_list:
+            # Search for tasks with the given name
+            tasks = Task.objects.filter(task_name=task_name)
+            for task in tasks:
+                # Set the 'done' attribute of the task to False
+                task.procastination_factor = task.procastination_factor+1
+                
+                task.save()
+    parameter_updation();
+    return Response({"message": "Feedback processed successfully"})

@@ -43,6 +43,9 @@ class Task(models.Model):
     focus_area = models.BooleanField()
     done= models.BooleanField(default=False)
     difficulty = models.IntegerField(default=0)
+    procastination_factor=models.IntegerField(default=0,blank=True)
     def __str__(self):
         return f"{self.task_name} - {self.course.course_name}"
     
+class Difficulty(models.Model):
+    student
