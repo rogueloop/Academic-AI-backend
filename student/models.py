@@ -47,5 +47,3 @@ class Task(models.Model):
     def __str__(self):
         return f"{self.task_name} - {self.course.course_name}"
     
-class Difficulty(models.Model):
-    student
