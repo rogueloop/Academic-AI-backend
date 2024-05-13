@@ -105,11 +105,14 @@ def no_of_topic_skiped_by_student():
 
 @api_view(['POST'])
 def completed_task(request, *args, **kwargs):
-    task_id = request.data.get('task_id')
-    task = Task.objects.get(id=task_id)
-    task.completed = True
-    task.save()
-    return Response({"message": "Task Completed"})
+    user=request.data.get('user')
+    user_instance = User.objects.get(clg_id=user)
+    task_name = request.data.get('task_name')
+    tasks = Task.objects.filter(task_name=task_name, student=user_instance)
+    for task in tasks:
+        task.done = True
+        task.save()
+    return Response({"message": "Task completed"})
 
 
 @api_view(['GET'])
@@ -121,7 +124,7 @@ def Total_users(request, *args, **kwargs):
 def Average_task_done(request, *args, **kwargs):
     users = User.objects.all()
     for user in users:
-        tasks = Task.objects.filter(user=user)
+        tasks = Task.objects.filter(student=user)
         count = 0
         for task in tasks:
             if task.done:
