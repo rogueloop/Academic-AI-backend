@@ -89,3 +89,12 @@ def feedback(request):
                 task.save()
     parameter_updation();
     return Response({"message": "Feedback processed successfully"})
+
+def no_of_topic_skiped_by_student():
+    tasks=Task.objects.all()
+    count=0
+    for task in tasks:
+        if task.procastination_factor>3:
+            count+=1
+    return Response({"no_of_topic_skiped_by_student":count})
+

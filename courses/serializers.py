@@ -9,8 +9,7 @@ class CourseSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Subject
-        fields = ('department', 'subject_code', 'no_of_modules', 'semester', 'scheme', 'subject_name', 'hours','credits')
-
+        fields = '__all__'
 class ExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam

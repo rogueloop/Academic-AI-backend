@@ -4,11 +4,16 @@ from .serializers import CourseSerializer, TopicSerializer,ExamSerializer
 
 from rest_framework.response import Response
 
-from rest_framework.decorators import action, APIView
+from rest_framework.decorators import action, APIView, api_view
 from student.models import User
 
 from student.models import User,Task
 import random
+from datetime import timedelta
+from rest_framework.decorators import api_view
+from .models import Topic, Exam
+from .serializers import TopicSerializer
+from rest_framework.response import Response
 
 
 class CourseViewSet(generics.ListCreateAPIView):
@@ -86,3 +91,54 @@ class TopicViewSet(generics.ListCreateAPIView):
 class ExamViewSet(viewsets.ModelViewSet):
     queryset = Exam.objects.all()
     serializer_class = ExamSerializer
+
+
+@api_view(['GET'])
+def marked_as_important(request, *args, **kwargs):
+    name=request.data.get('topic_name')
+    topic = Topic.objects.get(topic_name=name)
+    topic.no_marked_as_important += 1
+    topic.save()
+    return Response({"message":"Marked as important"})
+
+
+@api_view(['GET'])
+def marked_as_difficult(request, *args, **kwargs):
+    name=request.data.get('topic_name')
+    topic = Topic.objects.get(topic_name=name)
+    topic.no_marked_as_difficult += 1
+    topic.save()
+    return Response({"message":"Marked as difficult"})
+
+
+@api_view(['GET'])
+def marked_as_easy(request, *args, **kwargs):
+    name=request.data.get('topic_name')
+    topic = Topic.objects.get(topic_name=name)
+    topic.no_marked_as_easy += 1
+    topic.save()
+    return Response({"message":"Marked as easy"})
+
+
+@api_view(['GET'])
+def count_of_importance(request, *args, **kwargs):
+    name = request.data.get('topic_name')
+    department = request.data.get('department')
+    topic = Topic.objects.get(topic_name=name, subject__department=department)
+    return Response({"no_of_importance": topic.no_marked_as_important})
+
+@api_view(['GET'])
+def next_exam_date(request, **args):
+    department = request.data.get('department')
+    semester = request.data.get('semester')
+    exam = Exam.objects.filter(subject__department=department, subject__semester=semester).order_by('series_one_date') 
+    exam_date = exam[0].series_one_date
+
+    # Check if there is any event close to the exam date
+    events = ExamSerializer(Exam.objects.filter(exam)).data
+
+    if events:
+        return Response({"exam_date": exam_date, "event_close": True})
+    else:
+        return Response({"exam_date": exam_date, "event_close": False})
+
