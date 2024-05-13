@@ -43,7 +43,16 @@ class Task(models.Model):
     focus_area = models.BooleanField()
     done= models.BooleanField(default=False)
     difficulty = models.IntegerField(default=0)
+    skiped=models.BooleanField(default=False)
+    skip_count=models.IntegerField(default=0)
     procastination_factor=models.IntegerField(default=0,blank=True)
     def __str__(self):
         return f"{self.task_name} - {self.course.course_name}"
     
+class Assesments(models.Model):
+    student=models.CharField(max_length=10,primary_key=True,blank=True)
+    subject=models.ForeignKey(Subject, on_delete=models.CASCADE)
+    series_1=models.IntegerField(blank=True,null=True)
+    series_2=models.IntegerField(blank=True,null=True)
+    assignement_1=models.IntegerField(blank=True,null=True)
+    assignement_2=models.IntegerField(blank=True,null=True)

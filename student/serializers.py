@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Task
+from .models import User, Task, Assesments
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +25,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
       
         return user
+    
+class AssesmentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assesments
+        fields = '__all__'

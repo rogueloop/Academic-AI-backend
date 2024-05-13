@@ -1,4 +1,4 @@
-from .views import RegisterAPI,LoginAPI,TaskViewSet,get_topics
+from .views import RegisterAPI,LoginAPI,TaskViewSet,get_topics,analytics
 from django.urls import path
 from knox import views as knox_views
 
@@ -9,4 +9,5 @@ urlpatterns = [
     path('schedule/',get_topics , name='schedule'),
     path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
     path('task/', TaskViewSet.as_view() , name='task'),
+    path('analytics/',analytics , name='analytics')
 ]

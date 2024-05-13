@@ -51,14 +51,18 @@ def get_topics(request):
     """
     Determine the current user by their token, and return ttaheir data
     """
-    task=Task.objects.all()
-    serial=TaskSerializer(task,many=True).data
-    schedules=schedule.Scheduler(3, 0.01, 0.9,0.4,35,serial)
+    user = request.GET.get('user')
+    print(user)
+    extracted_string = user.strip('"')
+    user=extracted_string
+    user_instance = User.objects.get(clg_id=user)
+    tasks = Task.objects.filter(student=user_instance)
+    serial = TaskSerializer(tasks, many=True).data
+    schedules = schedule.Scheduler(3, 0.01, 0.9, 0.4, 35, serial)
     print(serial)
     schedules.train()
     res = schedules.generate_study_schedule()
-    return Response(res) 
-
+    return Response(res)
 
 @api_view(['POST'])
 def feedback(request):
@@ -98,3 +102,76 @@ def no_of_topic_skiped_by_student():
             count+=1
     return Response({"no_of_topic_skiped_by_student":count})
 
+
+@api_view(['POST'])
+def completed_task(request, *args, **kwargs):
+    task_id = request.data.get('task_id')
+    task = Task.objects.get(id=task_id)
+    task.completed = True
+    task.save()
+    return Response({"message": "Task Completed"})
+
+
+@api_view(['GET'])
+def Total_users(request, *args, **kwargs):
+    user = User.objects.all()
+    return Response({"Total_users": len(user)})
+
+@api_view(['GET'])
+def Average_task_done(request, *args, **kwargs):
+    users = User.objects.all()
+    for user in users:
+        tasks = Task.objects.filter(user=user)
+        count = 0
+        for task in tasks:
+            if task.done:
+                count += 1
+        return Response({"Average_task_done": count/len(tasks)})
+    return Response({"Average_task_done": 0})
+
+
+
+@api_view(['GET'])
+def analytics(request, *args, **kwargs):
+    data = [{
+        "name": "AMIT",
+        "admission_no": "KSD29CSOO2",
+        "topic_completed": 10,
+        "no_of_skipped_topics": 2
+    }, {
+        "name": "RAJESH",
+        "admission_no": "KSD29CSO44",
+        "topic_completed": 9,
+        "no_of_skipped_topics": 1
+    },
+        {
+        "name": "RAVI",
+        "admission_no": "KSD29CSO45",
+        "topic_completed": 6,
+        "no_of_skipped_topics": 4
+    }, {
+        "name": "SHAM",
+        "admission_no": "KSD29CSO46",
+        "topic_completed": 7,
+        "no_of_skipped_topics": 3
+    },
+        {
+        "name": "SHARATH",
+        "admission_no": "KSD29CSO16",
+        "topic_completed": 6,
+        "no_of_skipped_topics": 4
+    },
+        {
+        "name": "SREELAKSHMI",
+        "admission_no": "KSD29CS012",
+        "topic_completed": 10,
+        "no_of_skipped_topics": 0
+    },
+        {
+        "name": "AFSAL",
+        "admission_no": "KSD29CS033",
+        "topic_completed": 5,
+        "no_of_skipped_topics": 5
+    }
+    ]
+    return Response(data)
