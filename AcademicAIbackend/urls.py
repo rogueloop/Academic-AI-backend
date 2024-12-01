@@ -40,5 +40,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('courses/v1/',include('courses.urls')),
-    path('student/',include('student.urls')),
+    path('student/v1/',include('student.urls')),
 ]
